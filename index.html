@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">Use your mouse to explore the solar system!</div>
+    <canvas id="solarSystemCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('solarSystemCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        const planets = [
+            { name: 'Mercury', color: 'gray', radius: 5, orbitRadius: 50, speed: 0.1 },
+            { name: 'Venus', color: 'yellow', radius: 8, orbitRadius: 100, speed: 0.08 },
+            { name: 'Earth', color: 'blue', radius: 10, orbitRadius: 150, speed: 0.06 },
+            { name: 'Mars', color: 'red', radius: 7, orbitRadius: 200, speed: 0.05 },
+            { name: 'Jupiter', color: 'orange', radius: 20, orbitRadius: 300, speed: 0.04 },
+            { name: 'Saturn', color: 'goldenrod', radius: 18, orbitRadius: 400, speed: 0.03 },
+            { name: 'Uranus', color: 'lightblue', radius: 15, orbitRadius: 500, speed: 0.02 },
+            { name: 'Neptune', color: 'blue', radius: 14, orbitRadius: 600, speed: 0.01 }
+        ];
+
+        let angle = 0;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the Sun
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 30, 0, Math.PI * 2);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+
+            // Draw planets
+            planets.forEach(planet => {
+                const x = centerX + Math.cos(angle * planet.speed) * planet.orbitRadius;
+                const y = centerY + Math.sin(angle * planet.speed) * planet.orbitRadius;
+
+                // Draw orbit
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, planet.orbitRadius, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.stroke();
+
+                // Draw planet
+                ctx.beginPath();
+                ctx.arc(x, y, planet.radius, 0, Math.PI * 2);
+                ctx.fillStyle = planet.color;
+                ctx.fill();
+            });
+
+            angle += 0.02;
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
